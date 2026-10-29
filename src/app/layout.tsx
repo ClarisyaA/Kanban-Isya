@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist } from "next/font/google";
+import { themeScript } from "@/components/theme-toggle";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -18,7 +19,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="id">
+    // The theme script adds the "dark" class before hydration.
+    <html lang="id" suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+      </head>
       <body className={`${geistSans.variable} antialiased`}>{children}</body>
     </html>
   );

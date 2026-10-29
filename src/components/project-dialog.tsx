@@ -18,7 +18,7 @@ export function ProjectDialog({ project, onSave, onDelete, onClose }: Props) {
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-stone-900/40 p-4"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"
       onMouseDown={(e) => e.target === e.currentTarget && onClose()}
     >
       <form
@@ -26,7 +26,7 @@ export function ProjectDialog({ project, onSave, onDelete, onClose }: Props) {
           e.preventDefault();
           if (name.trim()) onSave({ name: name.trim(), color });
         }}
-        className="w-full max-w-sm rounded-lg bg-white p-5 shadow-xl"
+        className="w-full max-w-sm rounded-lg bg-surface p-5 shadow-xl"
       >
         <div className="mb-4 flex items-center justify-between">
           <h2 className="text-base font-semibold text-stone-900">
@@ -56,7 +56,7 @@ export function ProjectDialog({ project, onSave, onDelete, onClose }: Props) {
               type="button"
               onClick={() => setColor(c)}
               className={clsx(
-                "h-7 w-7 rounded-full ring-offset-2 transition",
+                "h-7 w-7 rounded-full ring-offset-2 ring-offset-surface transition",
                 color === c && "ring-2 ring-stone-900",
               )}
               style={{ background: c }}
@@ -81,7 +81,7 @@ export function ProjectDialog({ project, onSave, onDelete, onClose }: Props) {
                   onDelete(project.id);
                 }
               }}
-              className="flex items-center gap-1 rounded-lg px-3 py-1.5 text-sm font-medium text-red-600 hover:bg-red-50"
+              className="flex items-center gap-1 rounded-lg px-3 py-1.5 text-sm font-medium text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/40"
             >
               <Trash2 size={15} /> Hapus
             </button>

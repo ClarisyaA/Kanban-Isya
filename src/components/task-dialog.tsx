@@ -45,12 +45,12 @@ export function TaskDialog({ task, isNew, projects, columns, onSave, onDelete, o
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-end justify-center bg-stone-900/40 p-0 sm:items-center sm:p-4"
+      className="fixed inset-0 z-50 flex items-end justify-center bg-black/50 p-0 sm:items-center sm:p-4"
       onMouseDown={(e) => e.target === e.currentTarget && onClose()}
     >
       <form
         onSubmit={submit}
-        className="max-h-[92vh] w-full max-w-lg overflow-y-auto rounded-t-lg bg-white p-5 shadow-xl sm:rounded-lg"
+        className="max-h-[92vh] w-full max-w-lg overflow-y-auto rounded-t-lg bg-surface p-5 shadow-xl sm:rounded-lg"
       >
         <div className="mb-4 flex items-center justify-between">
           <h2 className="text-base font-semibold text-stone-900">{isNew ? "Task baru" : "Edit task"}</h2>
@@ -135,7 +135,7 @@ export function TaskDialog({ task, isNew, projects, columns, onSave, onDelete, o
             </Field>
           </div>
 
-          {error && <p className="rounded-md bg-red-50 px-3 py-2 text-sm text-red-600">{error}</p>}
+          {error && <p className="rounded-md bg-red-50 dark:bg-red-950/40 px-3 py-2 text-sm text-red-600 dark:text-red-400">{error}</p>}
         </div>
 
         <div className="mt-5 flex items-center gap-2">
@@ -145,7 +145,7 @@ export function TaskDialog({ task, isNew, projects, columns, onSave, onDelete, o
               onClick={() => {
                 if (confirm(`Hapus task "${task.title}"?`)) onDelete(task.id);
               }}
-              className="flex items-center gap-1 rounded-lg px-3 py-1.5 text-sm font-medium text-red-600 hover:bg-red-50"
+              className="flex items-center gap-1 rounded-lg px-3 py-1.5 text-sm font-medium text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/40"
             >
               <Trash2 size={15} /> Hapus
             </button>

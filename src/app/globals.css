@@ -1,20 +1,47 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 @theme inline {
   --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
 }
 
+@theme {
+  /* Cards, panels, inputs: white in light mode, raised dark surface in dark mode. */
+  --color-surface: #ffffff;
+}
+
+/*
+ * Dark mode flips the stone scale, so existing stone-* utilities keep their meaning
+ * ("50 = page background", "900 = strongest text") without per-element dark: variants.
+ */
+.dark {
+  color-scheme: dark;
+  --color-surface: #242120;
+  --color-stone-50: #141312;
+  --color-stone-100: #1c1a18;
+  --color-stone-200: #33302d;
+  --color-stone-300: #45413d;
+  --color-stone-400: #6f6963;
+  --color-stone-500: #9a938d;
+  --color-stone-600: #b5aea8;
+  --color-stone-700: #d0cac5;
+  --color-stone-800: #e2ddd9;
+  --color-stone-900: #f0ece9;
+  --color-stone-950: #f7f5f3;
+}
+
 body {
-  background: #fafaf9;
-  color: #1c1917;
+  background: var(--color-stone-50);
+  color: var(--color-stone-900);
 }
 
 @layer components {
   .input {
-    @apply w-full rounded-lg border border-stone-200 bg-white px-3 py-2 text-sm text-stone-900 outline-none transition placeholder:text-stone-400 focus:border-stone-500;
+    @apply w-full rounded-lg border border-stone-200 bg-surface px-3 py-2 text-sm text-stone-900 outline-none transition placeholder:text-stone-400 focus:border-stone-500;
   }
   .btn-primary {
-    @apply rounded-lg bg-stone-900 px-3 py-1.5 text-sm font-medium text-white transition hover:bg-stone-700 disabled:opacity-60;
+    @apply rounded-lg bg-stone-900 px-3 py-1.5 text-sm font-medium text-stone-50 transition hover:bg-stone-700 disabled:opacity-60;
   }
   .btn-ghost {
     @apply rounded-lg px-3 py-1.5 text-sm font-medium text-stone-600 transition hover:bg-stone-100;

@@ -32,6 +32,7 @@ import { GanttChart } from "./gantt-chart";
 import { KanbanBoard, type TaskMove } from "./kanban-board";
 import { ProjectDialog } from "./project-dialog";
 import { TaskDialog } from "./task-dialog";
+import { ThemeToggle } from "./theme-toggle";
 
 type View = "board" | "timeline";
 const STORAGE_KEY = "kanban:selected";
@@ -279,7 +280,7 @@ export function Workspace({ user, initialProjects, initialColumns, initialTasks 
   return (
     <div className="flex h-dvh overflow-hidden">
       {/* Sidebar */}
-      <aside className="hidden w-64 shrink-0 flex-col border-r border-stone-200 bg-white md:flex">
+      <aside className="hidden w-64 shrink-0 flex-col border-r border-stone-200 bg-surface md:flex">
         <div className="px-4 py-4 font-semibold text-stone-900">Kanban Board</div>
 
         <nav className="scrollbar-thin flex-1 overflow-y-auto px-2">
@@ -320,6 +321,7 @@ export function Workspace({ user, initialProjects, initialColumns, initialTasks 
             <p className="truncate text-sm font-medium text-stone-800">{user.name}</p>
             <p className="truncate text-xs text-stone-500">{user.email}</p>
           </div>
+          <ThemeToggle />
           <button className="icon-btn" onClick={handleSignOut} title="Keluar">
             <LogOut size={16} />
           </button>
@@ -328,7 +330,7 @@ export function Workspace({ user, initialProjects, initialColumns, initialTasks 
 
       {/* Main */}
       <main className="flex min-w-0 flex-1 flex-col">
-        <header className="flex flex-wrap items-center gap-3 border-b border-stone-200 bg-white px-4 py-3 md:px-6">
+        <header className="flex flex-wrap items-center gap-3 border-b border-stone-200 bg-surface px-4 py-3 md:px-6">
           {/* Mobile project switcher */}
           <select
             className="input w-auto md:hidden"
@@ -377,6 +379,9 @@ export function Workspace({ user, initialProjects, initialColumns, initialTasks 
             <button className="btn-primary flex items-center gap-1" onClick={() => openNewTask()}>
               <Plus size={16} /> Task
             </button>
+            <span className="md:hidden">
+              <ThemeToggle />
+            </span>
             <button className="icon-btn md:hidden" onClick={handleSignOut} title="Keluar">
               <LogOut size={16} />
             </button>
@@ -384,7 +389,7 @@ export function Workspace({ user, initialProjects, initialColumns, initialTasks 
         </header>
 
         {error && (
-          <div className="flex items-center gap-3 border-b border-red-200 bg-red-50 px-6 py-2 text-sm text-red-700">
+          <div className="flex items-center gap-3 border-b border-red-200 dark:border-red-900 bg-red-50 dark:bg-red-950/40 px-6 py-2 text-sm text-red-700 dark:text-red-400">
             <span className="flex-1">{error}</span>
             <button className="font-medium underline" onClick={() => window.location.reload()}>
               Muat ulang
@@ -501,7 +506,7 @@ function ViewTab({
       onClick={onClick}
       className={clsx(
         "flex items-center gap-1.5 rounded-md px-3 py-1 font-medium transition",
-        active ? "bg-white text-stone-900" : "text-stone-500 hover:text-stone-700",
+        active ? "bg-surface text-stone-900" : "text-stone-500 hover:text-stone-700",
       )}
     >
       {icon}

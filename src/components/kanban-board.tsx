@@ -292,7 +292,7 @@ function BoardColumn({
                 <MoreHorizontal size={16} />
               </button>
               {menuOpen && (
-                <div className="absolute right-0 top-8 z-20 w-48 rounded-lg border border-stone-200 bg-white py-1 text-sm shadow-lg">
+                <div className="absolute right-0 top-8 z-20 w-48 rounded-lg border border-stone-200 bg-surface py-1 text-sm shadow-lg">
                   <MenuItem
                     icon={<Pencil size={14} />}
                     onClick={() => {
@@ -421,7 +421,7 @@ function TaskCardView({
   return (
     <article
       className={clsx(
-        "cursor-grab rounded-md border border-stone-200 bg-white px-3 py-2.5 transition hover:border-stone-400 active:cursor-grabbing",
+        "cursor-grab rounded-md border border-stone-200 bg-surface px-3 py-2.5 transition hover:border-stone-400 active:cursor-grabbing",
         className,
       )}
     >
@@ -438,7 +438,7 @@ function TaskCardView({
             </span>
           )}
           {range && <span>{range}</span>}
-          {task.priority === "high" && <span className="font-medium text-red-700">High</span>}
+          {task.priority === "high" && <span className="font-medium text-red-700 dark:text-red-400">High</span>}
         </div>
       )}
     </article>
@@ -539,7 +539,7 @@ function MenuItem({
       onClick={onClick}
       className={clsx(
         "flex w-full items-center gap-2 px-3 py-1.5 text-left hover:bg-stone-50",
-        danger ? "text-red-600" : "text-stone-700",
+        danger ? "text-red-600 dark:text-red-400" : "text-stone-700",
       )}
     >
       {icon}

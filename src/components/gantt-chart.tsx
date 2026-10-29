@@ -151,7 +151,7 @@ export function GanttChart({ tasks, projects, columns, isAll, onOpenTask, onChan
 
   return (
     <div className="flex h-full flex-col">
-      <div className="flex items-center justify-between gap-2 border-b border-stone-200 bg-white px-4 py-2 md:px-6">
+      <div className="flex items-center justify-between gap-2 border-b border-stone-200 bg-surface px-4 py-2 md:px-6">
         <p className="hidden text-xs text-stone-500 sm:block">
           Drag bar untuk menggeser jadwal, tarik ujung bar untuk mengubah durasi, klik untuk detail.
         </p>
@@ -166,7 +166,7 @@ export function GanttChart({ tasks, projects, columns, isAll, onOpenTask, onChan
                 onClick={() => setZoom(i)}
                 className={clsx(
                   "rounded-md px-2.5 py-1 font-medium",
-                  zoom === i ? "bg-white text-stone-900" : "text-stone-500",
+                  zoom === i ? "bg-surface text-stone-900" : "text-stone-500",
                 )}
               >
                 {z.label}
@@ -181,12 +181,12 @@ export function GanttChart({ tasks, projects, columns, isAll, onOpenTask, onChan
           Belum ada task. Tambahkan task untuk melihat timeline.
         </div>
       ) : (
-        <div ref={scrollRef} className="scrollbar-thin relative flex-1 overflow-auto bg-white">
+        <div ref={scrollRef} className="scrollbar-thin relative flex-1 overflow-auto bg-surface">
           <div style={{ width: LEFT_WIDTH + timelineWidth }} className="relative">
             {/* Header */}
-            <div className="sticky top-0 z-20 flex border-b border-stone-200 bg-white">
+            <div className="sticky top-0 z-20 flex border-b border-stone-200 bg-surface">
               <div
-                className="sticky left-0 z-30 flex shrink-0 items-end border-r border-stone-200 bg-white px-4 pb-2 text-xs font-semibold uppercase tracking-wide text-stone-500"
+                className="sticky left-0 z-30 flex shrink-0 items-end border-r border-stone-200 bg-surface px-4 pb-2 text-xs font-semibold uppercase tracking-wide text-stone-500"
                 style={{ width: LEFT_WIDTH }}
               >
                 Task
@@ -213,7 +213,7 @@ export function GanttChart({ tasks, projects, columns, isAll, onOpenTask, onChan
                         className={clsx(
                           "shrink-0 py-1 text-center text-xs",
                           isWeekend(d) ? "text-stone-400" : "text-stone-600",
-                          isToday && "font-semibold text-red-600",
+                          isToday && "font-semibold text-red-600 dark:text-red-400",
                         )}
                         style={{ width: dayWidth }}
                       >
@@ -234,7 +234,7 @@ export function GanttChart({ tasks, projects, columns, isAll, onOpenTask, onChan
                     isWeekend(d) ? (
                       <div
                         key={i}
-                        className="absolute inset-y-0 bg-stone-50"
+                        className="absolute inset-y-0 bg-stone-50 dark:bg-stone-100"
                         style={{ left: i * dayWidth, width: dayWidth }}
                       />
                     ) : null,
@@ -331,7 +331,7 @@ function TaskRow({
     <div className="group relative flex border-b border-stone-100" style={{ height: ROW_HEIGHT }}>
       <button
         onClick={onOpen}
-        className="sticky left-0 z-10 flex shrink-0 items-center gap-2 border-r border-stone-200 bg-white px-4 text-left hover:bg-stone-50"
+        className="sticky left-0 z-10 flex shrink-0 items-center gap-2 border-r border-stone-200 bg-surface px-4 text-left hover:bg-stone-50"
         style={{ width: LEFT_WIDTH }}
       >
         <span className={clsx("min-w-0 flex-1 truncate text-sm", done ? "text-stone-400 line-through" : "text-stone-800")}>
@@ -355,7 +355,7 @@ function TaskRow({
           <div
             className={clsx(
               "absolute top-1.5 flex select-none items-center overflow-hidden rounded text-xs font-medium text-white",
-              drag ? "cursor-grabbing ring-2 ring-offset-1" : "cursor-grab",
+              drag ? "cursor-grabbing ring-2 ring-offset-1 ring-offset-surface" : "cursor-grab",
               done && "opacity-60",
             )}
             style={{

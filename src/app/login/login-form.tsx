@@ -45,7 +45,7 @@ export function LoginForm({ googleEnabled }: { googleEnabled: boolean }) {
 
   return (
     <main className="flex min-h-screen items-center justify-center bg-stone-50 px-4">
-      <div className="w-full max-w-sm rounded-lg border border-stone-200 bg-white p-8">
+      <div className="w-full max-w-sm rounded-lg border border-stone-200 bg-surface p-8">
         <h1 className="mb-6 text-lg font-semibold text-stone-900">Kanban Board</h1>
 
         {googleEnabled && (
@@ -54,7 +54,7 @@ export function LoginForm({ googleEnabled }: { googleEnabled: boolean }) {
               type="button"
               onClick={onGoogle}
               disabled={googleLoading}
-              className="flex w-full items-center justify-center gap-2 rounded-lg border border-stone-200 bg-white py-2 text-sm font-medium text-stone-700 transition hover:bg-stone-50 disabled:opacity-60"
+              className="flex w-full items-center justify-center gap-2 rounded-lg border border-stone-200 bg-surface py-2 text-sm font-medium text-stone-700 transition hover:bg-stone-50 disabled:opacity-60"
             >
               {googleLoading ? <Loader2 size={16} className="animate-spin" /> : <GoogleIcon />}
               Lanjutkan dengan Google
@@ -77,7 +77,7 @@ export function LoginForm({ googleEnabled }: { googleEnabled: boolean }) {
                 setError(null);
               }}
               className={`rounded-md py-1.5 font-medium transition ${
-                mode === m ? "bg-white text-stone-900" : "text-stone-500"
+                mode === m ? "bg-surface text-stone-900" : "text-stone-500"
               }`}
             >
               {m === "signin" ? "Masuk" : "Daftar"}
@@ -118,7 +118,7 @@ export function LoginForm({ googleEnabled }: { googleEnabled: boolean }) {
             />
           </Field>
 
-          {error && <p className="rounded-md bg-red-50 px-3 py-2 text-sm text-red-600">{error}</p>}
+          {error && <p className="rounded-md bg-red-50 dark:bg-red-950/40 px-3 py-2 text-sm text-red-600 dark:text-red-400">{error}</p>}
 
           <button
             type="submit"
