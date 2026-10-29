@@ -3,6 +3,7 @@
 import clsx from "clsx";
 import { format } from "date-fns";
 import {
+  Download,
   GanttChartSquare,
   KanbanSquare,
   Layers,
@@ -28,6 +29,7 @@ import {
 import { signOut } from "@/lib/auth-client";
 import { buildGroups, columnForProject, normalizeName, type BoardGroup } from "@/lib/board";
 import { ALL_PROJECTS, type Column, type Project, type Task } from "@/lib/types";
+import { ExportDialog } from "./export-dialog";
 import { GanttChart } from "./gantt-chart";
 import { KanbanBoard, type TaskMove } from "./kanban-board";
 import { ProjectDialog } from "./project-dialog";
@@ -53,6 +55,7 @@ export function Workspace({ user, initialProjects, initialColumns, initialTasks 
   const [view, setView] = useState<View>("board");
   const [taskDialog, setTaskDialog] = useState<{ task: Task; isNew: boolean } | null>(null);
   const [projectDialog, setProjectDialog] = useState<{ project: Project | null } | null>(null);
+  const [exportOpen, setExportOpen] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   // Remember the last selected project / view per browser.
@@ -376,6 +379,11 @@ export function Workspace({ user, initialProjects, initialColumns, initialTasks 
             <button className="btn-ghost md:hidden" onClick={() => setProjectDialog({ project: null })}>
               + Project
             </button>
+            {projects.length > 0 && (
+              <button className="btn-ghost flex items-center gap-1.5" onClick={() => setExportOpen(true)}>
+                <Download size={15} /> <span className="hidden sm:inline">Download</span>
+              </button>
+            )}
             <button className="btn-primary flex items-center gap-1" onClick={() => openNewTask()}>
               <Plus size={16} /> Task
             </button>
@@ -440,6 +448,15 @@ export function Workspace({ user, initialProjects, initialColumns, initialTasks 
           onSave={saveTask}
           onDelete={removeTask}
           onClose={() => setTaskDialog(null)}
+        />
+      )}
+      {exportOpen && (
+        <ExportDialog
+          projects={projects}
+          columns={columns}
+          tasks={tasks}
+          initialProjectId={currentProject?.id ?? null}
+          onClose={() => setExportOpen(false)}
         />
       )}
       {projectDialog && (

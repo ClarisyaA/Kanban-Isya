@@ -15,6 +15,11 @@ Kanban board multi-project dengan timeline Gantt. Dibangun dengan **Next.js 15**
   klik untuk edit. Zoom Hari / Minggu / Bulan, tombol "Hari ini", task di board _Done_ dicoret.
   Task yang belum punya tanggal bisa dijadwalkan dengan klik langsung di timeline.
 
+- **Download laporan** (tombol _Download_ di header): pilih project lewat checkbox (atau semua), lalu
+  - **Excel (.xlsx)**: sheet _Ringkasan Task_ (tanggal & hari mulai/selesai, durasi, hari ke-, sisa hari,
+    keterangan Berjalan/Terlambat/Selesai/…) dan sheet _Detail Harian_ (1 baris per task per tanggal).
+  - **CSV**: pilih salah satu tabel di atas.
+
 ### Cara kerja mode "Semua Project"
 
 Board dari semua project digabung **berdasarkan nama**. Contoh: _To Do_ di Insight dan _To Do_ di
