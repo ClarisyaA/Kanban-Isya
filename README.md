@@ -46,6 +46,23 @@ Website tampil sebagai satu board _To Do_.
    ```
    Buka <http://localhost:3000>, daftar akun, lalu buat project pertama.
 
+## Login dengan Google
+
+Tombol "Lanjutkan dengan Google" otomatis muncul kalau `GOOGLE_CLIENT_ID` dan `GOOGLE_CLIENT_SECRET` diisi.
+
+1. Buka <https://console.cloud.google.com> → buat / pilih project.
+2. **APIs & Services → OAuth consent screen**: isi nama app & email, User type **External**, lalu publish
+   (atau tambahkan email kamu sebagai test user).
+3. **APIs & Services → Credentials → Create credentials → OAuth client ID** → tipe **Web application**:
+   - **Authorized JavaScript origins**: `http://localhost:3000` dan `https://<domain-vercel-kamu>`
+   - **Authorized redirect URIs**:
+     `http://localhost:3000/api/auth/callback/google` dan
+     `https://<domain-vercel-kamu>/api/auth/callback/google`
+4. Salin Client ID & Client Secret ke `.env.local` dan ke Environment Variables di Vercel, lalu redeploy.
+
+Kalau email Google sama dengan akun yang sebelumnya daftar pakai password, keduanya otomatis
+tersambung ke akun yang sama.
+
 ## Deploy ke Vercel
 
 1. Push folder ini ke GitHub.
@@ -56,6 +73,7 @@ Website tampil sebagai satu board _To Do_.
    | `DATABASE_URL` | Supabase transaction pooler URL (port 6543) |
    | `BETTER_AUTH_SECRET` | string acak yang sama seperti lokal (atau buat baru) |
    | `BETTER_AUTH_URL` | URL produksi, mis. `https://kanban-kamu.vercel.app` |
+   | `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET` | (opsional) untuk login Google |
 4. Deploy. Tabel cukup dibuat sekali (langkah 3 setup lokal), tidak perlu di Vercel.
 
 > Setelah deploy pertama, kalau URL Vercel berbeda dari yang kamu isi di `BETTER_AUTH_URL`,
