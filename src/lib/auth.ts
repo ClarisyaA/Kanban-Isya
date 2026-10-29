@@ -6,7 +6,16 @@ import * as schema from "@/db/schema";
 
 export const googleEnabled = !!(process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET);
 
+/**
+ * On Vercel production, always use the project's production domain so the OAuth flow starts
+ * and ends on the same origin (a mismatch loses the state cookie → "state_mismatch").
+ * Elsewhere fall back to BETTER_AUTH_URL.
+ */
+export const productionHost =
+  process.env.VERCEL_ENV === "production" ? process.env.VERCEL_PROJECT_PRODUCTION_URL : undefined;
+
 export const auth = betterAuth({
+  baseURL: productionHost ? `https://${productionHost}` : process.env.BETTER_AUTH_URL,
   database: drizzleAdapter(db, {
     provider: "pg",
     schema: {
@@ -34,7 +43,5 @@ export const auth = betterAuth({
   account: {
     accountLinking: { enabled: true, trustedProviders: ["google"] },
   },
-  // Allow Vercel preview deployments in addition to BETTER_AUTH_URL.
-  trustedOrigins: process.env.VERCEL_URL ? [`https://${process.env.VERCEL_URL}`] : [],
   plugins: [nextCookies()],
 });
