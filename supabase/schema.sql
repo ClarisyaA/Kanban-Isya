@@ -76,11 +76,15 @@ create table if not exists task (
   priority text not null default 'medium',
   start_date date,
   due_date date,
+  completed_date date,
   position integer not null default 0,
   created_at timestamptz not null default now()
 );
 create index if not exists task_project_idx on task(project_id);
 create index if not exists task_column_idx on task(column_id);
+
+-- Untuk database yang dibuat sebelum kolom completed_date ada:
+alter table task add column if not exists completed_date date;
 
 -- App mengakses DB lewat koneksi Postgres langsung (bukan Supabase REST API).
 -- Aktifkan RLS tanpa policy supaya tabel tidak bisa dibaca lewat anon key.

@@ -107,6 +107,8 @@ export const task = pgTable(
     priority: text("priority").notNull().default("medium"),
     startDate: date("start_date", { mode: "string" }),
     dueDate: date("due_date", { mode: "string" }),
+    // Filled automatically when the task enters a "Done" board, cleared when it leaves.
+    completedDate: date("completed_date", { mode: "string" }),
     position: integer("position").notNull().default(0),
     createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
   },

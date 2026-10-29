@@ -176,6 +176,7 @@ export async function createTask(input: TaskInput) {
     priority: PRIORITIES.includes(input.priority) ? input.priority : "medium",
     startDate: dateOrNull(input.startDate),
     dueDate: dateOrNull(input.dueDate),
+    completedDate: dateOrNull(input.completedDate),
     position: input.position,
   });
 }
@@ -206,6 +207,7 @@ export async function updateTask(
         PRIORITIES.includes(patch.priority) && { priority: patch.priority }),
       ...(patch.startDate !== undefined && { startDate: dateOrNull(patch.startDate) }),
       ...(patch.dueDate !== undefined && { dueDate: dateOrNull(patch.dueDate) }),
+      ...(patch.completedDate !== undefined && { completedDate: dateOrNull(patch.completedDate) }),
       ...(patch.position !== undefined && { position: patch.position }),
     })
     .where(eq(task.id, id));
@@ -218,7 +220,9 @@ export async function deleteTask(id: string) {
 }
 
 /** Persist the result of a drag & drop: new column and position for each moved task. */
-export async function moveTasks(moves: { id: string; columnId: string; position: number }[]) {
+export async function moveTasks(
+  moves: { id: string; columnId: string; position: number; completedDate: string | null }[],
+) {
   const userId = await requireUserId();
   if (moves.length === 0) return;
 
@@ -245,7 +249,10 @@ export async function moveTasks(moves: { id: string; columnId: string; position:
 
   await db.transaction(async (tx) => {
     for (const m of moves) {
-      await tx.update(task).set({ columnId: m.columnId, position: m.position }).where(eq(task.id, m.id));
+      await tx
+        .update(task)
+        .set({ columnId: m.columnId, position: m.position, completedDate: dateOrNull(m.completedDate) })
+        .where(eq(task.id, m.id));
     }
   });
 }

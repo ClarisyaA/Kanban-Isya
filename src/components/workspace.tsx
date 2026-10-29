@@ -27,7 +27,14 @@ import {
   updateTask,
 } from "@/app/actions";
 import { signOut } from "@/lib/auth-client";
-import { buildGroups, columnForProject, normalizeName, type BoardGroup } from "@/lib/board";
+import {
+  buildGroups,
+  columnForProject,
+  completionDate,
+  isDoneColumn,
+  normalizeName,
+  type BoardGroup,
+} from "@/lib/board";
 import { ALL_PROJECTS, type Column, type Project, type Task } from "@/lib/types";
 import { ExportDialog } from "./export-dialog";
 import { GanttChart } from "./gantt-chart";
@@ -38,6 +45,8 @@ import { ThemeToggle } from "./theme-toggle";
 
 type View = "board" | "timeline";
 const STORAGE_KEY = "kanban:selected";
+
+const todayISO = () => format(new Date(), "yyyy-MM-dd");
 
 type Props = {
   user: { name: string; email: string };
@@ -157,7 +166,29 @@ export function Workspace({ user, initialProjects, initialColumns, initialTasks 
   function renameGroup(group: BoardGroup, name: string) {
     const ids = new Set(group.columns.map((c) => c.id));
     setColumns((cs) => cs.map((c) => (ids.has(c.id) ? { ...c, name } : c)));
-    persist(() => renameColumns([...ids], name));
+
+    const today = todayISO();
+    const changed = tasks
+      .filter((t) => ids.has(t.columnId))
+      .map((t) => ({ t, completedDate: completionDate(group.name, name, t.completedDate, today) }))
+      .filter(({ t, completedDate }) => completedDate !== t.completedDate);
+    const byId = new Map(changed.map(({ t, completedDate }) => [t.id, completedDate]));
+    if (changed.length) {
+      setTasks((ts) => ts.map((t) => (byId.has(t.id) ? { ...t, completedDate: byId.get(t.id)! } : t)));
+    }
+    persist(async () => {
+      await renameColumns([...ids], name);
+      if (changed.length) {
+        await moveTasks(
+          changed.map(({ t, completedDate }) => ({
+            id: t.id,
+            columnId: t.columnId,
+            position: t.position,
+            completedDate,
+          })),
+        );
+      }
+    });
   }
 
   function deleteGroup(group: BoardGroup) {
@@ -197,6 +228,7 @@ export function Workspace({ user, initialProjects, initialColumns, initialTasks 
       priority: "medium",
       startDate: null,
       dueDate: null,
+      completedDate: null,
       position: 0,
       ...overrides,
     };
@@ -215,7 +247,7 @@ export function Workspace({ user, initialProjects, initialColumns, initialTasks 
       return;
     }
     const column = (group && columnForProject(group, project.id)) ?? firstColumnOf(project.id);
-    const today = format(new Date(), "yyyy-MM-dd");
+    const today = todayISO();
     setTaskDialog({
       task: blankTask(
         project.id,
@@ -234,7 +266,14 @@ export function Workspace({ user, initialProjects, initialColumns, initialTasks 
     const position = columnChanged
       ? Math.max(-1, ...tasks.filter((t) => t.columnId === draft.columnId).map((t) => t.position)) + 1
       : draft.position;
-    const next = { ...draft, position };
+    const columnName = columns.find((c) => c.id === draft.columnId)?.name ?? "";
+    const next = {
+      ...draft,
+      position,
+      // The dialog already stamps/clears the date when the board changes; this only guards
+      // against a stale value outside Done.
+      completedDate: isDoneColumn(columnName) ? draft.completedDate : null,
+    };
 
     if (isNew) {
       setTasks((ts) => [...ts, next]);
@@ -252,13 +291,28 @@ export function Workspace({ user, initialProjects, initialColumns, initialTasks 
     persist(() => deleteTask(id));
   }
 
-  function tasksMoved(moves: TaskMove[], newColumns: Column[]) {
+  function tasksMoved(baseMoves: TaskMove[], newColumns: Column[]) {
+    const today = todayISO();
+    const columnName = new Map([...columns, ...newColumns].map((c) => [c.id, c.name]));
+    const taskById = new Map(tasks.map((t) => [t.id, t]));
+    const moves = baseMoves.map((m) => ({
+      ...m,
+      completedDate: completionDate(
+        columnName.get(taskById.get(m.id)?.columnId ?? "") ?? "",
+        columnName.get(m.columnId) ?? "",
+        taskById.get(m.id)?.completedDate ?? null,
+        today,
+      ),
+    }));
+
     const byId = new Map(moves.map((m) => [m.id, m]));
     if (newColumns.length) setColumns((cs) => [...cs, ...newColumns]);
     setTasks((ts) =>
       ts.map((t) => {
         const m = byId.get(t.id);
-        return m ? { ...t, columnId: m.columnId, position: m.position } : t;
+        return m
+          ? { ...t, columnId: m.columnId, position: m.position, completedDate: m.completedDate }
+          : t;
       }),
     );
     persist(async () => {

@@ -365,7 +365,13 @@ function TaskRow({
               background: color,
               touchAction: "none",
             }}
-            title={`${task.title}\n${format(span.start, "d MMM yyyy")} – ${format(span.end, "d MMM yyyy")}`}
+            title={[
+              task.title,
+              `${format(span.start, "d MMM yyyy")} – ${format(span.end, "d MMM yyyy")}`,
+              task.completedDate && `Diselesaikan ${format(parseISO(task.completedDate), "d MMM yyyy")}`,
+            ]
+              .filter(Boolean)
+              .join("\n")}
             onPointerDown={(e) => onStartDrag(e, task, "move")}
             onPointerMove={onPointerMove}
             onPointerUp={(e) => onEndDrag(e, task)}

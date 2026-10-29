@@ -41,6 +41,7 @@ export default async function Home() {
         priority: task.priority,
         startDate: task.startDate,
         dueDate: task.dueDate,
+        completedDate: task.completedDate,
         position: task.position,
       })
       .from(task)

@@ -52,3 +52,12 @@ export function columnForProject(group: BoardGroup, projectId: string) {
 export function isDoneColumn(name: string) {
   return /^(done|selesai|complete(d)?|finished)$/i.test(name.trim());
 }
+
+/**
+ * Completion date after a task goes from board `from` to board `to`: stamped with today when it
+ * enters a Done board, kept while it stays in one, cleared when it leaves.
+ */
+export function completionDate(from: string, to: string, current: string | null, today: string) {
+  if (!isDoneColumn(to)) return null;
+  return isDoneColumn(from) ? current : today;
+}

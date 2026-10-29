@@ -1,8 +1,9 @@
 "use client";
 
+import { format } from "date-fns";
 import { Trash2, X } from "lucide-react";
 import { useState } from "react";
-import { normalizeName } from "@/lib/board";
+import { completionDate, isDoneColumn, normalizeName } from "@/lib/board";
 import type { Column, Priority, Project, Task } from "@/lib/types";
 
 type Props = {
@@ -16,8 +17,24 @@ type Props = {
 };
 
 export function TaskDialog({ task, isNew, projects, columns, onSave, onDelete, onClose }: Props) {
-  const [draft, setDraft] = useState<Task>(task);
+  // A task created straight into a Done board is completed today.
+  const [draft, setDraft] = useState<Task>(() =>
+    isNew && !task.completedDate && isDoneColumn(columns.find((c) => c.id === task.columnId)?.name ?? "")
+      ? { ...task, completedDate: format(new Date(), "yyyy-MM-dd") }
+      : task,
+  );
   const [error, setError] = useState<string | null>(null);
+
+  const today = format(new Date(), "yyyy-MM-dd");
+  const columnName = (id: string) => columns.find((c) => c.id === id)?.name ?? "";
+  const inDone = isDoneColumn(columnName(draft.columnId));
+
+  // Moving into / out of a Done board stamps or clears the completion date right away.
+  const withColumn = (d: Task, columnId: string): Task => ({
+    ...d,
+    columnId,
+    completedDate: completionDate(columnName(d.columnId), columnName(columnId), d.completedDate, today),
+  });
 
   const projectColumns = columns
     .filter((c) => c.projectId === draft.projectId)
@@ -30,7 +47,7 @@ export function TaskDialog({ task, isNew, projects, columns, onSave, onDelete, o
       .filter((c) => c.projectId === projectId)
       .sort((a, b) => a.position - b.position);
     const match = target.find((c) => normalizeName(c.name) === normalizeName(currentName)) ?? target[0];
-    setDraft({ ...draft, projectId, columnId: match?.id ?? "" });
+    setDraft(withColumn({ ...draft, projectId }, match?.id ?? ""));
   }
 
   function submit(e: React.FormEvent) {
@@ -93,7 +110,7 @@ export function TaskDialog({ task, isNew, projects, columns, onSave, onDelete, o
               <select
                 className="input"
                 value={draft.columnId}
-                onChange={(e) => setDraft({ ...draft, columnId: e.target.value })}
+                onChange={(e) => setDraft(withColumn(draft, e.target.value))}
               >
                 {projectColumns.map((c) => (
                   <option key={c.id} value={c.id}>
@@ -124,7 +141,7 @@ export function TaskDialog({ task, isNew, projects, columns, onSave, onDelete, o
                 onChange={(e) => setDraft({ ...draft, startDate: e.target.value || null })}
               />
             </Field>
-            <Field label="Selesai">
+            <Field label="Target selesai">
               <input
                 type="date"
                 className="input"
@@ -135,7 +152,21 @@ export function TaskDialog({ task, isNew, projects, columns, onSave, onDelete, o
             </Field>
           </div>
 
-          {error && <p className="rounded-md bg-red-50 dark:bg-red-950/40 px-3 py-2 text-sm text-red-600 dark:text-red-400">{error}</p>}
+          {inDone && (
+            <Field label="Diselesaikan">
+              <input
+                type="date"
+                className="input"
+                value={draft.completedDate ?? ""}
+                onChange={(e) => setDraft({ ...draft, completedDate: e.target.value || null })}
+              />
+              <span className="mt-1 block text-xs text-stone-500">
+                Terisi otomatis saat task masuk ke Done, dikosongkan lagi kalau dipindah keluar.
+              </span>
+            </Field>
+          )}
+
+          {error &&<p className="rounded-md bg-red-50 dark:bg-red-950/40 px-3 py-2 text-sm text-red-600 dark:text-red-400">{error}</p>}
         </div>
 
         <div className="mt-5 flex items-center gap-2">

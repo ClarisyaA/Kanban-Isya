@@ -22,7 +22,8 @@ export type Task = {
   description: string;
   priority: Priority;
   startDate: string | null; // YYYY-MM-DD
-  dueDate: string | null; // YYYY-MM-DD
+  dueDate: string | null; // YYYY-MM-DD, planned finish
+  completedDate: string | null; // YYYY-MM-DD, actual finish (set while in a Done board)
   position: number;
 };
 

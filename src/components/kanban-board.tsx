@@ -429,7 +429,7 @@ function TaskCardView({
       {task.description && (
         <p className="mt-1 line-clamp-2 text-xs text-stone-500">{task.description}</p>
       )}
-      {((showProject && project) || range || task.priority === "high") && (
+      {((showProject && project) || range || task.completedDate || task.priority === "high") && (
         <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-stone-500">
           {showProject && project && (
             <span className="flex min-w-0 items-center gap-1.5">
@@ -438,6 +438,11 @@ function TaskCardView({
             </span>
           )}
           {range && <span>{range}</span>}
+          {task.completedDate && (
+            <span className="text-emerald-700 dark:text-emerald-400">
+              Selesai {format(parseISO(task.completedDate), "d MMM")}
+            </span>
+          )}
           {task.priority === "high" && <span className="font-medium text-red-700 dark:text-red-400">High</span>}
         </div>
       )}

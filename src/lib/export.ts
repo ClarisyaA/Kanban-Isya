@@ -24,8 +24,12 @@ function taskSpan(t: Task): Span | null {
 }
 
 /** Status of a task relative to a given day. */
-function statusOn(day: Date, span: Span | null, done: boolean) {
-  if (done) return "Selesai";
+function statusOn(day: Date, span: Span | null, done: boolean, completed: Date | null) {
+  if (done) {
+    if (!completed || !span) return "Selesai";
+    const late = differenceInCalendarDays(completed, span.end);
+    return late > 0 ? `Selesai, terlambat ${late} hari` : "Selesai tepat waktu";
+  }
   if (!span) return "Belum dijadwalkan";
   if (day < span.start) return "Belum mulai";
   if (day > span.end) return "Terlambat";
@@ -42,6 +46,8 @@ export type SummaryRow = {
   startDay: string;
   end: Date | null;
   endDay: string;
+  completed: Date | null;
+  completedDay: string;
   duration: number | null;
   dayNumber: number | null; // "hari ke-" as of today, only while running
   remaining: number | null; // days left until due (negative = late)
@@ -83,7 +89,8 @@ export function buildReport(
 
   const summary: SummaryRow[] = selected.map(({ t, span, column }) => {
     const done = isDoneColumn(column?.name ?? "");
-    const status = statusOn(today, span, done);
+    const completed = done && t.completedDate ? parseISO(t.completedDate) : null;
+    const status = statusOn(today, span, done, completed);
     return {
       project: projectName.get(t.projectId) ?? "",
       task: t.title,
@@ -94,6 +101,8 @@ export function buildReport(
       startDay: span ? dayName(span.start) : "",
       end: span?.end ?? null,
       endDay: span ? dayName(span.end) : "",
+      completed,
+      completedDay: completed ? dayName(completed) : "",
       duration: span?.days ?? null,
       dayNumber: span && status === "Berjalan" ? differenceInCalendarDays(today, span.start) + 1 : null,
       remaining: span && !done ? differenceInCalendarDays(span.end, today) : null,
@@ -140,12 +149,14 @@ const SUMMARY_COLUMNS: { header: string; width: number; value: (r: SummaryRow) =
   { header: "Prioritas", width: 10, value: (r) => r.priority },
   { header: "Tanggal mulai", width: 14, value: (r) => r.start },
   { header: "Hari mulai", width: 11, value: (r) => r.startDay },
-  { header: "Tanggal selesai", width: 14, value: (r) => r.end },
-  { header: "Hari selesai", width: 11, value: (r) => r.endDay },
+  { header: "Target selesai", width: 14, value: (r) => r.end },
+  { header: "Hari target", width: 11, value: (r) => r.endDay },
+  { header: "Diselesaikan", width: 14, value: (r) => r.completed },
+  { header: "Hari diselesaikan", width: 16, value: (r) => r.completedDay },
   { header: "Durasi (hari)", width: 12, value: (r) => r.duration },
   { header: "Hari ke- (hari ini)", width: 16, value: (r) => r.dayNumber },
   { header: "Sisa hari", width: 10, value: (r) => r.remaining },
-  { header: "Keterangan", width: 18, value: (r) => r.status },
+  { header: "Keterangan", width: 26, value: (r) => r.status },
   { header: "Deskripsi", width: 40, value: (r) => r.description },
 ];
 
