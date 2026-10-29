@@ -151,22 +151,22 @@ export function GanttChart({ tasks, projects, columns, isAll, onOpenTask, onChan
 
   return (
     <div className="flex h-full flex-col">
-      <div className="flex items-center justify-between gap-2 border-b border-slate-200 bg-white px-4 py-2 md:px-6">
-        <p className="hidden text-xs text-slate-500 sm:block">
+      <div className="flex items-center justify-between gap-2 border-b border-stone-200 bg-white px-4 py-2 md:px-6">
+        <p className="hidden text-xs text-stone-500 sm:block">
           Drag bar untuk menggeser jadwal, tarik ujung bar untuk mengubah durasi, klik untuk detail.
         </p>
         <div className="ml-auto flex items-center gap-2">
           <button onClick={scrollToToday} className="btn-ghost flex items-center gap-1 whitespace-nowrap">
             <Crosshair size={14} /> Hari ini
           </button>
-          <div className="flex rounded-lg bg-slate-100 p-0.5 text-xs">
+          <div className="flex rounded-lg bg-stone-100 p-0.5 text-xs">
             {ZOOMS.map((z, i) => (
               <button
                 key={z.label}
                 onClick={() => setZoom(i)}
                 className={clsx(
                   "rounded-md px-2.5 py-1 font-medium",
-                  zoom === i ? "bg-white text-slate-900 shadow-sm" : "text-slate-500",
+                  zoom === i ? "bg-white text-stone-900" : "text-stone-500",
                 )}
               >
                 {z.label}
@@ -177,26 +177,26 @@ export function GanttChart({ tasks, projects, columns, isAll, onOpenTask, onChan
       </div>
 
       {rows.length === 0 ? (
-        <div className="flex flex-1 items-center justify-center text-sm text-slate-400">
+        <div className="flex flex-1 items-center justify-center text-sm text-stone-400">
           Belum ada task. Tambahkan task untuk melihat timeline.
         </div>
       ) : (
         <div ref={scrollRef} className="scrollbar-thin relative flex-1 overflow-auto bg-white">
           <div style={{ width: LEFT_WIDTH + timelineWidth }} className="relative">
             {/* Header */}
-            <div className="sticky top-0 z-20 flex border-b border-slate-200 bg-white">
+            <div className="sticky top-0 z-20 flex border-b border-stone-200 bg-white">
               <div
-                className="sticky left-0 z-30 flex shrink-0 items-end border-r border-slate-200 bg-white px-4 pb-2 text-xs font-semibold uppercase tracking-wide text-slate-500"
+                className="sticky left-0 z-30 flex shrink-0 items-end border-r border-stone-200 bg-white px-4 pb-2 text-xs font-semibold uppercase tracking-wide text-stone-500"
                 style={{ width: LEFT_WIDTH }}
               >
                 Task
               </div>
               <div style={{ width: timelineWidth }}>
-                <div className="flex border-b border-slate-100">
+                <div className="flex border-b border-stone-100">
                   {months.map((m, i) => (
                     <div
                       key={i}
-                      className="truncate border-r border-slate-100 px-2 py-1 text-xs font-semibold capitalize text-slate-700"
+                      className="truncate border-r border-stone-100 px-2 py-1 text-xs font-semibold capitalize text-stone-700"
                       style={{ width: m.days * dayWidth }}
                     >
                       {m.label}
@@ -211,9 +211,9 @@ export function GanttChart({ tasks, projects, columns, isAll, onOpenTask, onChan
                       <div
                         key={i}
                         className={clsx(
-                          "shrink-0 py-1 text-center text-[10px]",
-                          isWeekend(d) ? "text-slate-400" : "text-slate-600",
-                          isToday && "font-bold text-indigo-600",
+                          "shrink-0 py-1 text-center text-xs",
+                          isWeekend(d) ? "text-stone-400" : "text-stone-600",
+                          isToday && "font-semibold text-red-600",
                         )}
                         style={{ width: dayWidth }}
                       >
@@ -234,27 +234,27 @@ export function GanttChart({ tasks, projects, columns, isAll, onOpenTask, onChan
                     isWeekend(d) ? (
                       <div
                         key={i}
-                        className="absolute inset-y-0 bg-slate-50"
+                        className="absolute inset-y-0 bg-stone-50"
                         style={{ left: i * dayWidth, width: dayWidth }}
                       />
                     ) : null,
                   )}
                 <div
-                  className="absolute inset-y-0 w-0.5 bg-indigo-500/70"
+                  className="absolute inset-y-0 w-px bg-red-500"
                   style={{ left: todayOffset + dayWidth / 2 }}
                 />
               </div>
 
               {rows.map((row) =>
                 row.kind === "project" ? (
-                  <div key={`p-${row.project.id}`} className="relative flex border-b border-slate-100 bg-slate-50/80" style={{ height: 32 }}>
+                  <div key={`p-${row.project.id}`} className="relative flex border-b border-stone-100 bg-stone-50/80" style={{ height: 32 }}>
                     <div
-                      className="sticky left-0 z-10 flex shrink-0 items-center gap-2 border-r border-slate-200 bg-slate-50 px-4 text-xs font-semibold text-slate-700"
+                      className="sticky left-0 z-10 flex shrink-0 items-center gap-2 border-r border-stone-200 bg-stone-50 px-4 text-xs font-semibold text-stone-700"
                       style={{ width: LEFT_WIDTH }}
                     >
                       <span className="h-2.5 w-2.5 rounded-full" style={{ background: row.project.color }} />
                       <span className="truncate">{row.project.name}</span>
-                      <span className="text-slate-400">({row.count})</span>
+                      <span className="text-stone-400">({row.count})</span>
                     </div>
                   </div>
                 ) : (
@@ -328,16 +328,16 @@ function TaskRow({
   const color = project?.color ?? "#6366f1";
 
   return (
-    <div className="group relative flex border-b border-slate-100" style={{ height: ROW_HEIGHT }}>
+    <div className="group relative flex border-b border-stone-100" style={{ height: ROW_HEIGHT }}>
       <button
         onClick={onOpen}
-        className="sticky left-0 z-10 flex shrink-0 items-center gap-2 border-r border-slate-200 bg-white px-4 text-left hover:bg-slate-50"
+        className="sticky left-0 z-10 flex shrink-0 items-center gap-2 border-r border-stone-200 bg-white px-4 text-left hover:bg-stone-50"
         style={{ width: LEFT_WIDTH }}
       >
-        <span className={clsx("min-w-0 flex-1 truncate text-sm", done ? "text-slate-400 line-through" : "text-slate-800")}>
+        <span className={clsx("min-w-0 flex-1 truncate text-sm", done ? "text-stone-400 line-through" : "text-stone-800")}>
           {task.title}
         </span>
-        <span className="shrink-0 rounded bg-slate-100 px-1.5 py-0.5 text-[10px] text-slate-500">
+        <span className="shrink-0 text-xs text-stone-400">
           {columnName}
         </span>
       </button>
@@ -354,7 +354,7 @@ function TaskRow({
         {span ? (
           <div
             className={clsx(
-              "absolute top-1.5 flex select-none items-center overflow-hidden rounded-md text-xs font-medium text-white shadow-sm",
+              "absolute top-1.5 flex select-none items-center overflow-hidden rounded text-xs font-medium text-white",
               drag ? "cursor-grabbing ring-2 ring-offset-1" : "cursor-grab",
               done && "opacity-60",
             )}
@@ -384,7 +384,7 @@ function TaskRow({
             />
           </div>
         ) : (
-          <div className="pointer-events-none absolute inset-0 flex items-center px-3 text-xs text-slate-400 opacity-0 transition group-hover:opacity-100">
+          <div className="pointer-events-none absolute inset-0 flex items-center px-3 text-xs text-stone-400 opacity-0 transition group-hover:opacity-100">
             Belum ada tanggal — klik di timeline untuk menjadwalkan
           </div>
         )}

@@ -18,7 +18,7 @@ export function ProjectDialog({ project, onSave, onDelete, onClose }: Props) {
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 p-4"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-stone-900/40 p-4"
       onMouseDown={(e) => e.target === e.currentTarget && onClose()}
     >
       <form
@@ -26,10 +26,10 @@ export function ProjectDialog({ project, onSave, onDelete, onClose }: Props) {
           e.preventDefault();
           if (name.trim()) onSave({ name: name.trim(), color });
         }}
-        className="w-full max-w-sm rounded-2xl bg-white p-5 shadow-xl"
+        className="w-full max-w-sm rounded-lg bg-white p-5 shadow-xl"
       >
         <div className="mb-4 flex items-center justify-between">
-          <h2 className="text-base font-semibold text-slate-900">
+          <h2 className="text-base font-semibold text-stone-900">
             {project ? "Edit project" : "Project baru"}
           </h2>
           <button type="button" className="icon-btn" onClick={onClose}>
@@ -38,7 +38,7 @@ export function ProjectDialog({ project, onSave, onDelete, onClose }: Props) {
         </div>
 
         <label className="block">
-          <span className="mb-1 block text-xs font-medium text-slate-600">Nama project</span>
+          <span className="mb-1 block text-xs font-medium text-stone-600">Nama project</span>
           <input
             autoFocus
             className="input"
@@ -48,7 +48,7 @@ export function ProjectDialog({ project, onSave, onDelete, onClose }: Props) {
           />
         </label>
 
-        <span className="mb-1 mt-4 block text-xs font-medium text-slate-600">Warna</span>
+        <span className="mb-1 mt-4 block text-xs font-medium text-stone-600">Warna</span>
         <div className="flex flex-wrap gap-2">
           {PROJECT_COLORS.map((c) => (
             <button
@@ -57,7 +57,7 @@ export function ProjectDialog({ project, onSave, onDelete, onClose }: Props) {
               onClick={() => setColor(c)}
               className={clsx(
                 "h-7 w-7 rounded-full ring-offset-2 transition",
-                color === c && "ring-2 ring-slate-900",
+                color === c && "ring-2 ring-stone-900",
               )}
               style={{ background: c }}
               aria-label={c}
@@ -66,7 +66,7 @@ export function ProjectDialog({ project, onSave, onDelete, onClose }: Props) {
         </div>
 
         {!project && (
-          <p className="mt-4 text-xs text-slate-500">
+          <p className="mt-4 text-xs text-stone-500">
             Project baru otomatis punya board <b>To Do</b>, <b>In Progress</b>, dan <b>Done</b>. Kamu
             bisa rename, hapus, atau tambah board lain.
           </p>

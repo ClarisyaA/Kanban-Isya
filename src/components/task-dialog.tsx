@@ -45,15 +45,15 @@ export function TaskDialog({ task, isNew, projects, columns, onSave, onDelete, o
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-end justify-center bg-slate-900/40 p-0 sm:items-center sm:p-4"
+      className="fixed inset-0 z-50 flex items-end justify-center bg-stone-900/40 p-0 sm:items-center sm:p-4"
       onMouseDown={(e) => e.target === e.currentTarget && onClose()}
     >
       <form
         onSubmit={submit}
-        className="max-h-[92vh] w-full max-w-lg overflow-y-auto rounded-t-2xl bg-white p-5 shadow-xl sm:rounded-2xl"
+        className="max-h-[92vh] w-full max-w-lg overflow-y-auto rounded-t-lg bg-white p-5 shadow-xl sm:rounded-lg"
       >
         <div className="mb-4 flex items-center justify-between">
-          <h2 className="text-base font-semibold text-slate-900">{isNew ? "Task baru" : "Edit task"}</h2>
+          <h2 className="text-base font-semibold text-stone-900">{isNew ? "Task baru" : "Edit task"}</h2>
           <button type="button" className="icon-btn" onClick={onClose}>
             <X size={18} />
           </button>
@@ -167,7 +167,7 @@ export function TaskDialog({ task, isNew, projects, columns, onSave, onDelete, o
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <label className="block">
-      <span className="mb-1 block text-xs font-medium text-slate-600">{label}</span>
+      <span className="mb-1 block text-xs font-medium text-stone-600">{label}</span>
       {children}
     </label>
   );

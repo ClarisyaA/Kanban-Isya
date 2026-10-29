@@ -279,13 +279,8 @@ export function Workspace({ user, initialProjects, initialColumns, initialTasks 
   return (
     <div className="flex h-dvh overflow-hidden">
       {/* Sidebar */}
-      <aside className="hidden w-64 shrink-0 flex-col border-r border-slate-200 bg-white md:flex">
-        <div className="flex items-center gap-2 px-4 py-4">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-600 text-white">
-            <KanbanSquare size={18} />
-          </div>
-          <span className="font-semibold text-slate-900">Kanban Board</span>
-        </div>
+      <aside className="hidden w-64 shrink-0 flex-col border-r border-stone-200 bg-white md:flex">
+        <div className="px-4 py-4 font-semibold text-stone-900">Kanban Board</div>
 
         <nav className="scrollbar-thin flex-1 overflow-y-auto px-2">
           <SidebarItem
@@ -296,7 +291,7 @@ export function Workspace({ user, initialProjects, initialColumns, initialTasks 
             count={tasks.length}
           />
           <div className="mb-1 mt-4 flex items-center justify-between px-2">
-            <span className="text-xs font-semibold uppercase tracking-wide text-slate-400">Project</span>
+            <span className="text-xs font-semibold uppercase tracking-wide text-stone-400">Project</span>
             <button className="icon-btn" onClick={() => setProjectDialog({ project: null })} title="Project baru">
               <Plus size={16} />
             </button>
@@ -313,17 +308,17 @@ export function Workspace({ user, initialProjects, initialColumns, initialTasks 
             />
           ))}
           {projects.length === 0 && (
-            <p className="px-2 py-2 text-xs text-slate-400">Belum ada project.</p>
+            <p className="px-2 py-2 text-xs text-stone-400">Belum ada project.</p>
           )}
         </nav>
 
-        <div className="flex items-center gap-2 border-t border-slate-200 p-3">
-          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-slate-200 text-xs font-semibold text-slate-700">
+        <div className="flex items-center gap-2 border-t border-stone-200 p-3">
+          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-stone-200 text-xs font-semibold text-stone-700">
             {user.name.slice(0, 1).toUpperCase()}
           </div>
           <div className="min-w-0 flex-1">
-            <p className="truncate text-sm font-medium text-slate-800">{user.name}</p>
-            <p className="truncate text-xs text-slate-500">{user.email}</p>
+            <p className="truncate text-sm font-medium text-stone-800">{user.name}</p>
+            <p className="truncate text-xs text-stone-500">{user.email}</p>
           </div>
           <button className="icon-btn" onClick={handleSignOut} title="Keluar">
             <LogOut size={16} />
@@ -333,7 +328,7 @@ export function Workspace({ user, initialProjects, initialColumns, initialTasks 
 
       {/* Main */}
       <main className="flex min-w-0 flex-1 flex-col">
-        <header className="flex flex-wrap items-center gap-3 border-b border-slate-200 bg-white px-4 py-3 md:px-6">
+        <header className="flex flex-wrap items-center gap-3 border-b border-stone-200 bg-white px-4 py-3 md:px-6">
           {/* Mobile project switcher */}
           <select
             className="input w-auto md:hidden"
@@ -352,7 +347,7 @@ export function Workspace({ user, initialProjects, initialColumns, initialTasks 
             {currentProject && (
               <span className="h-3 w-3 shrink-0 rounded-full" style={{ background: currentProject.color }} />
             )}
-            <h1 className="truncate text-lg font-semibold text-slate-900">
+            <h1 className="truncate text-lg font-semibold text-stone-900">
               {currentProject?.name ?? "Semua Project"}
             </h1>
             {currentProject && (
@@ -362,7 +357,7 @@ export function Workspace({ user, initialProjects, initialColumns, initialTasks 
             )}
           </div>
 
-          <div className="flex rounded-lg bg-slate-100 p-0.5 text-sm">
+          <div className="flex rounded-lg bg-stone-100 p-0.5 text-sm">
             <ViewTab active={view === "board"} onClick={() => setView("board")} icon={<KanbanSquare size={15} />}>
               Board
             </ViewTab>
@@ -473,13 +468,13 @@ function SidebarItem({
     <div
       className={clsx(
         "group mb-0.5 flex items-center rounded-lg pr-1 text-sm transition",
-        active ? "bg-indigo-50 text-indigo-700" : "text-slate-600 hover:bg-slate-100",
+        active ? "bg-stone-200/70 text-stone-900" : "text-stone-600 hover:bg-stone-100",
       )}
     >
       <button onClick={onClick} className="flex min-w-0 flex-1 items-center gap-2.5 px-2.5 py-2 text-left">
         <span className="flex w-4 justify-center">{icon}</span>
         <span className="min-w-0 flex-1 truncate font-medium">{label}</span>
-        <span className="text-xs text-slate-400 group-hover:hidden">{count}</span>
+        <span className="text-xs text-stone-400 group-hover:hidden">{count}</span>
       </button>
       {onEdit && (
         <button className="icon-btn hidden group-hover:inline-flex" onClick={onEdit} title="Edit project">
@@ -506,7 +501,7 @@ function ViewTab({
       onClick={onClick}
       className={clsx(
         "flex items-center gap-1.5 rounded-md px-3 py-1 font-medium transition",
-        active ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700",
+        active ? "bg-white text-stone-900" : "text-stone-500 hover:text-stone-700",
       )}
     >
       {icon}
@@ -518,18 +513,9 @@ function ViewTab({
 function EmptyState({ onCreate }: { onCreate: () => void }) {
   return (
     <div className="flex h-full flex-col items-center justify-center gap-3 p-6 text-center">
-      <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-indigo-50 text-indigo-600">
-        <Layers size={24} />
-      </div>
-      <h2 className="text-lg font-semibold text-slate-900">Mulai dengan membuat project</h2>
-      <p className="max-w-sm text-sm text-slate-500">
-        Setiap project punya board dan timeline sendiri. Pilih &ldquo;Semua Project&rdquo; untuk melihat
-        semuanya digabung.
-      </p>
-      <button className="btn-primary mt-2" onClick={onCreate}>
-        <span className="flex items-center gap-1">
-          <Plus size={16} /> Project baru
-        </span>
+      <p className="text-sm text-stone-500">Belum ada project.</p>
+      <button className="btn-primary" onClick={onCreate}>
+        Buat project
       </button>
     </div>
   );

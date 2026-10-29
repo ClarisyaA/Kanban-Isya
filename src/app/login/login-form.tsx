@@ -1,6 +1,6 @@
 "use client";
 
-import { KanbanSquare, Loader2 } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { signIn, signUp } from "@/lib/auth-client";
@@ -44,17 +44,9 @@ export function LoginForm({ googleEnabled }: { googleEnabled: boolean }) {
   }
 
   return (
-    <main className="flex min-h-screen items-center justify-center bg-slate-50 px-4">
-      <div className="w-full max-w-sm rounded-2xl border border-slate-200 bg-white p-8 shadow-sm">
-        <div className="mb-6 flex items-center gap-2">
-          <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-indigo-600 text-white">
-            <KanbanSquare size={20} />
-          </div>
-          <div>
-            <h1 className="text-lg font-semibold text-slate-900">Kanban Board</h1>
-            <p className="text-xs text-slate-500">Board & timeline untuk semua project</p>
-          </div>
-        </div>
+    <main className="flex min-h-screen items-center justify-center bg-stone-50 px-4">
+      <div className="w-full max-w-sm rounded-lg border border-stone-200 bg-white p-8">
+        <h1 className="mb-6 text-lg font-semibold text-stone-900">Kanban Board</h1>
 
         {googleEnabled && (
           <>
@@ -62,20 +54,20 @@ export function LoginForm({ googleEnabled }: { googleEnabled: boolean }) {
               type="button"
               onClick={onGoogle}
               disabled={googleLoading}
-              className="flex w-full items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-50 disabled:opacity-60"
+              className="flex w-full items-center justify-center gap-2 rounded-lg border border-stone-200 bg-white py-2 text-sm font-medium text-stone-700 transition hover:bg-stone-50 disabled:opacity-60"
             >
               {googleLoading ? <Loader2 size={16} className="animate-spin" /> : <GoogleIcon />}
               Lanjutkan dengan Google
             </button>
-            <div className="my-5 flex items-center gap-3 text-xs text-slate-400">
-              <span className="h-px flex-1 bg-slate-200" />
+            <div className="my-5 flex items-center gap-3 text-xs text-stone-400">
+              <span className="h-px flex-1 bg-stone-200" />
               atau dengan email
-              <span className="h-px flex-1 bg-slate-200" />
+              <span className="h-px flex-1 bg-stone-200" />
             </div>
           </>
         )}
 
-        <div className="mb-5 grid grid-cols-2 rounded-lg bg-slate-100 p-1 text-sm">
+        <div className="mb-5 grid grid-cols-2 rounded-lg bg-stone-100 p-1 text-sm">
           {(["signin", "signup"] as const).map((m) => (
             <button
               key={m}
@@ -85,7 +77,7 @@ export function LoginForm({ googleEnabled }: { googleEnabled: boolean }) {
                 setError(null);
               }}
               className={`rounded-md py-1.5 font-medium transition ${
-                mode === m ? "bg-white text-slate-900 shadow-sm" : "text-slate-500"
+                mode === m ? "bg-white text-stone-900" : "text-stone-500"
               }`}
             >
               {m === "signin" ? "Masuk" : "Daftar"}
@@ -145,7 +137,7 @@ export function LoginForm({ googleEnabled }: { googleEnabled: boolean }) {
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <label className="block">
-      <span className="mb-1 block text-xs font-medium text-slate-600">{label}</span>
+      <span className="mb-1 block text-xs font-medium text-stone-600">{label}</span>
       {children}
     </label>
   );

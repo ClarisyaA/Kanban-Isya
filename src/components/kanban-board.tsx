@@ -26,7 +26,6 @@ import { format, parseISO } from "date-fns";
 import {
   ArrowLeft,
   ArrowRight,
-  CalendarDays,
   Check,
   MoreHorizontal,
   Pencil,
@@ -36,7 +35,7 @@ import {
 } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { columnForProject, type BoardGroup } from "@/lib/board";
-import { PRIORITY_LABEL, type Column, type Project, type Task } from "@/lib/types";
+import { type Column, type Project, type Task } from "@/lib/types";
 
 type Items = Record<string, string[]>;
 
@@ -212,7 +211,7 @@ export function KanbanBoard({
             task={activeTask}
             project={projectsById.get(activeTask.projectId)}
             showProject={isAll}
-            className="rotate-2 shadow-xl"
+            className="rotate-1 shadow-lg"
           />
         ) : null}
       </DragOverlay>
@@ -262,7 +261,7 @@ function BoardColumn({
   }, [menuOpen]);
 
   return (
-    <section className="flex max-h-full w-72 shrink-0 flex-col rounded-xl bg-slate-100/80">
+    <section className="flex max-h-full w-72 shrink-0 flex-col rounded-lg bg-stone-100/80">
       <header className="flex items-center gap-1 px-3 pb-2 pt-3">
         {editing ? (
           <InlineInput
@@ -276,13 +275,13 @@ function BoardColumn({
         ) : (
           <>
             <h3
-              className="min-w-0 flex-1 cursor-text truncate text-sm font-semibold text-slate-700"
+              className="min-w-0 flex-1 cursor-text truncate text-sm font-semibold text-stone-700"
               onDoubleClick={() => setEditing(true)}
               title="Klik dua kali untuk rename"
             >
               {group.name}
             </h3>
-            <span className="rounded-full bg-slate-200 px-2 py-0.5 text-xs font-medium text-slate-600">
+            <span className="rounded-full bg-stone-200 px-2 py-0.5 text-xs font-medium text-stone-600">
               {taskIds.length}
             </span>
             <button className="icon-btn" onClick={onAddTask} title="Tambah task">
@@ -293,7 +292,7 @@ function BoardColumn({
                 <MoreHorizontal size={16} />
               </button>
               {menuOpen && (
-                <div className="absolute right-0 top-8 z-20 w-48 rounded-lg border border-slate-200 bg-white py-1 text-sm shadow-lg">
+                <div className="absolute right-0 top-8 z-20 w-48 rounded-lg border border-stone-200 bg-white py-1 text-sm shadow-lg">
                   <MenuItem
                     icon={<Pencil size={14} />}
                     onClick={() => {
@@ -347,7 +346,7 @@ function BoardColumn({
           ref={setNodeRef}
           className={clsx(
             "scrollbar-thin flex min-h-24 flex-1 flex-col gap-2 overflow-y-auto px-2 pb-2 transition-colors",
-            isOver && "rounded-lg bg-indigo-50",
+            isOver && "rounded-md bg-stone-200/60",
           )}
         >
           {taskIds.map((id) => {
@@ -364,14 +363,14 @@ function BoardColumn({
             );
           })}
           {taskIds.length === 0 && (
-            <p className="py-6 text-center text-xs text-slate-400">Belum ada task</p>
+            <p className="py-6 text-center text-xs text-stone-400">Belum ada task</p>
           )}
         </div>
       </SortableContext>
 
       <button
         onClick={onAddTask}
-        className="m-2 mt-0 flex items-center gap-1 rounded-lg px-2 py-1.5 text-sm text-slate-500 transition hover:bg-slate-200/70 hover:text-slate-800"
+        className="m-2 mt-0 flex items-center gap-1 rounded-lg px-2 py-1.5 text-sm text-stone-500 transition hover:bg-stone-200/70 hover:text-stone-800"
       >
         <Plus size={15} /> Tambah task
       </button>
@@ -407,12 +406,6 @@ function SortableTaskCard({
   );
 }
 
-const PRIORITY_STYLE = {
-  low: "bg-slate-100 text-slate-600",
-  medium: "bg-amber-50 text-amber-700",
-  high: "bg-red-50 text-red-700",
-};
-
 function TaskCardView({
   task,
   project,
@@ -428,30 +421,26 @@ function TaskCardView({
   return (
     <article
       className={clsx(
-        "cursor-grab rounded-lg border border-slate-200 bg-white p-3 shadow-sm transition hover:border-slate-300 hover:shadow active:cursor-grabbing",
+        "cursor-grab rounded-md border border-stone-200 bg-white px-3 py-2.5 transition hover:border-stone-400 active:cursor-grabbing",
         className,
       )}
-      style={{ borderLeft: `3px solid ${project?.color ?? "#94a3b8"}` }}
     >
-      {showProject && project && (
-        <p className="mb-1 truncate text-[11px] font-medium" style={{ color: project.color }}>
-          {project.name}
-        </p>
-      )}
-      <p className="text-sm font-medium leading-snug text-slate-800">{task.title}</p>
+      <p className="text-sm leading-snug text-stone-900">{task.title}</p>
       {task.description && (
-        <p className="mt-1 line-clamp-2 text-xs text-slate-500">{task.description}</p>
+        <p className="mt-1 line-clamp-2 text-xs text-stone-500">{task.description}</p>
       )}
-      <div className="mt-2 flex flex-wrap items-center gap-1.5">
-        <span className={clsx("rounded px-1.5 py-0.5 text-[11px] font-medium", PRIORITY_STYLE[task.priority])}>
-          {PRIORITY_LABEL[task.priority]}
-        </span>
-        {range && (
-          <span className="flex items-center gap-1 text-[11px] text-slate-500">
-            <CalendarDays size={12} /> {range}
-          </span>
-        )}
-      </div>
+      {((showProject && project) || range || task.priority === "high") && (
+        <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-stone-500">
+          {showProject && project && (
+            <span className="flex min-w-0 items-center gap-1.5">
+              <span className="h-2 w-2 shrink-0 rounded-full" style={{ background: project.color }} />
+              <span className="truncate">{project.name}</span>
+            </span>
+          )}
+          {range && <span>{range}</span>}
+          {task.priority === "high" && <span className="font-medium text-red-700">High</span>}
+        </div>
+      )}
     </article>
   );
 }
@@ -470,14 +459,14 @@ function AddColumn({ onAdd }: { onAdd: (name: string) => void }) {
     return (
       <button
         onClick={() => setAdding(true)}
-        className="flex w-72 shrink-0 items-center gap-2 rounded-xl border-2 border-dashed border-slate-200 px-4 py-3 text-sm font-medium text-slate-500 transition hover:border-slate-300 hover:bg-slate-100 hover:text-slate-700"
+        className="flex w-72 shrink-0 items-center gap-2 rounded-lg border border-dashed border-stone-300 px-4 py-3 text-sm font-medium text-stone-500 transition hover:border-stone-300 hover:bg-stone-100 hover:text-stone-700"
       >
         <Plus size={16} /> Tambah board
       </button>
     );
   }
   return (
-    <div className="w-72 shrink-0 rounded-xl bg-slate-100 p-3">
+    <div className="w-72 shrink-0 rounded-lg bg-stone-100 p-3">
       <InlineInput
         initial=""
         placeholder="Nama board, mis. Review"
@@ -549,8 +538,8 @@ function MenuItem({
     <button
       onClick={onClick}
       className={clsx(
-        "flex w-full items-center gap-2 px-3 py-1.5 text-left hover:bg-slate-50",
-        danger ? "text-red-600" : "text-slate-700",
+        "flex w-full items-center gap-2 px-3 py-1.5 text-left hover:bg-stone-50",
+        danger ? "text-red-600" : "text-stone-700",
       )}
     >
       {icon}

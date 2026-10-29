@@ -29,20 +29,14 @@ export type Task = {
 export const ALL_PROJECTS = "all";
 
 export const PROJECT_COLORS = [
-  "#6366f1",
-  "#0ea5e9",
-  "#10b981",
-  "#f59e0b",
-  "#ef4444",
-  "#ec4899",
-  "#8b5cf6",
-  "#14b8a6",
+  "#c2410c",
+  "#0f766e",
+  "#3f5f8a",
+  "#a16207",
+  "#7c3a5e",
+  "#4d7c0f",
+  "#57534e",
+  "#b4534b",
 ];
 
 export const DEFAULT_COLUMNS = ["To Do", "In Progress", "Done"];
-
-export const PRIORITY_LABEL: Record<Priority, string> = {
-  low: "Low",
-  medium: "Medium",
-  high: "High",
-};
