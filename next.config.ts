@@ -1,7 +1,8 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  // Pin the project root (a parent folder has its own lockfile).
+  outputFileTracingRoot: __dirname,
 };
 
 export default nextConfig;
