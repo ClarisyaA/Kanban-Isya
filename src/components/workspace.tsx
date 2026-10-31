@@ -252,7 +252,8 @@ export function Workspace({ user, initialProjects, initialColumns, initialTasks 
       task: blankTask(
         project.id,
         column?.id ?? "",
-        view === "timeline" ? { startDate: today, dueDate: today } : {},
+        // New tasks start on the day they're created; on the timeline they also get a 1-day bar.
+        view === "timeline" ? { startDate: today, dueDate: today } : { startDate: today },
       ),
       isNew: true,
     });
